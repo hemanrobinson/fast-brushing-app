@@ -16,7 +16,6 @@
 ```
 
 ```js
-// {
   // Initialization.
   const width = 200,
     height = 200,
@@ -184,31 +183,23 @@
   const brushCell = d3.select( Matrix.brushNode );
   brushCell.call( brush.move, [[ 40, 40 ], [ 80, 80 ]]);
   
-  // Return the graph.
+  // Display the graph.
   display( div.node());
-//  return div.node();
-// }
 ```
 
 ```js
 const nData = view( Inputs.range([9, 18], {value: 14, step: 1, label: "Points per Plot:", format: ( value ) => getPower( value )}))
-```
-
-```js
 const transparency = view( Inputs.range([0, 0.99], {value: 0.5, step: 0.01, label: "Transparency:" }))
 ```
 
 ```html
-<h2>User Interface</h2>
-```
 
-```html
+<h2>User Interface</h2>
+
 <p>
   This design is based on the <a href="http://www.sci.utah.edu/~kpotter/Library/Papers/becker:1987:BS/index.html">scatter plot matrix</a> of <a href="https://www.researchgate.net/scientific-contributions/Richard-A-Becker-7076158">Richard Becker</a> and <a href="https://www.cerias.purdue.edu/site/people/faculty/view/709">William Cleveland</a> (Becker and Cleveland, 1987).
 </p>
-```
 
-```html
 <figure>
   <a href="https://www.datavis.ca/milestones/index.php?group=1975%2B&mid=ms259">
     <img title="Dr. Richard Becker" alt="Dr. Richard Becker" src="${await FileAttachment("becker.png").url()}" style="border: 1px solid">
@@ -217,9 +208,7 @@ const transparency = view( Inputs.range([0, 0.99], {value: 0.5, step: 0.01, labe
     <img title="Dr. William Cleveland" alt="Dr. William Cleveland" src="${await FileAttachment("cleveland.png").url()}" style="border: 1px solid">
   </a>
 </figure>
-```
 
-```html
 <p>
   The goal of the scatter plot matrix is not to locate points, but to find patterns in the data.  Therefore, there are no axes, only data ranges.  This increases Tufte's "Data-Ink Ratio" (Tufte, 1983).
 </p>
@@ -241,13 +230,9 @@ const transparency = view( Inputs.range([0, 0.99], {value: 0.5, step: 0.01, labe
 <p>
   Shift, Control, and Command keys are standard modifiers to extend and reduce selections of individual objects (e.g. Apple, 2024). I have found no documented standards for their behavior during brushing. The behavior implemented here enables people to select irregular areas or disjoint clusters of points.
 </p>
-```
 
-```html
 <h2>Implementation</h2>
-```
 
-```html
 <p>
   This project uses <a href="https://react.dev">React</a>, <a href="https://github.com/mui-org/material-ui">Material-UI</a>, and <a href="https://github.com/d3/d3">d3</a>, and reuses some code from the <a href="https://observablehq.com/collection/@d3/d3-brush">d3-brush collection</a>.
 </p>
@@ -267,10 +252,7 @@ const transparency = view( Inputs.range([0, 0.99], {value: 0.5, step: 0.01, labe
 <p>
   Performance varies on different devices. My iMac (2020, 3.6 GHz 10-Core Intel Core i9, 128 GB) can brush 1,000,000 points per plot. In a 4x4 matrix, that's twelve million points.  As our hardware improves, we'll see these numbers grow.
 </p>
-```
 
-```js
-html`
 <style>
 h2 {
     padding-top: 10px;
@@ -282,7 +264,6 @@ rect.selection {
   stroke-opacity: 1;
 }
 </style>
-`
 ```
 
 ```js
@@ -292,27 +273,21 @@ rect.selection {
  * @return component
  */
 const Data = new Object();
-```
 
-```js
 /**
  * Array of indices of selected rows.
  *
  * @type {number[]}
  */
 Data.selectedRows = [];
-```
 
-```js
 /**
  * Deselects all rows.
  */
 Data.deselectAll = () => {
     Data.selectedRows = [];
 };
-```
 
-```js
 /**
  * Returns column names.
  *
@@ -321,9 +296,7 @@ Data.deselectAll = () => {
 Data.getColumnNames = () => {
     return [ "A", "B", "A * B", "sin( A / B )" ];
 };
-```
 
-```js
 /**
  * Returns domain of specified column.
  *
@@ -334,18 +307,14 @@ Data.getColumnNames = () => {
 Data.getDomain = ( nData, index ) => {
   return [ d3.min( Data.getValues( nData ), d => d[ index ]), d3.max( Data.getValues( nData ), d => d[ index ])];
 };
-```
 
-```js
 /**
  * Data values.
  *
  * @type {number[]}
  */
 Data.values = [];
-```
 
-```js
 /**
  * Returns data values.
  *
@@ -363,9 +332,7 @@ Data.getValues = ( nData ) => {
     }
     return Data.values;
 };
-```
 
-```js
 /**
  * Returns "nice" power of ten:  rounded to 1, 2, 5, 10, 20, 50, etc.
  *
@@ -376,68 +343,52 @@ const getPower = ( exp ) => {
     let m = (( exp % 3 ) === 0 ) ? 1 : (( exp % 3 ) === 1 ) ? 2 : 5;
     return m * ( 10 ** Math.floor( exp / 3 ));
 }
-```
 
-```js
 // Matrix.
 const Matrix = new Object();
-```
 
-```js
 /**
  * Bitmaps of deselected rows, cached for optimization, or undefined if none.
  *
  * @type {ImageData[][]|undefined}
  */
 Matrix.bitmaps = undefined;
-```
 
-```js
 /**
  * CANVAS element, or undefined if none.
  *
  * @type {Element|undefined}
  */
 Matrix.canvas = undefined;
-```
 
-```js
 /**
  * Node containing a brush, or undefined if none.
  *
  * @type {Node|undefined}
  */
 Matrix.brushNode = undefined;
-```
 
-```js
 /**
  * Scaled coordinates, or undefined if none.
  *
  * @type {Uint16Array[]|undefined}}
  */
 Matrix.scaled = undefined;
-```
 
-```js
 /**
  * True iff extending selection.
  *
  * @type {boolean}
  */
 Matrix.isExtending = false;
-```
 
-```js
 /**
  * True iff reducing selection.
  *
  * @type {boolean}
  */
 Matrix.isReducing = false;
-```
 
-```js
 /**
  * Clears data structures.
  */
@@ -447,9 +398,7 @@ Matrix.clear = () => {
   }
   Matrix.bitmaps = undefined;
 };
-```
 
-```js
 /**
  * Draws the grid, the plots, and the axes.
  *
@@ -516,14 +465,10 @@ Matrix.draw = ( width, height, nData, opacity, isDrawingAll ) => {
         }
     }
 };
-```
 
-```js
 // Axis.
 const Axis = new Object();
-```
 
-```js
 /**
  * Draws the axis.
  *
@@ -554,32 +499,24 @@ Axis.draw = ( x, y, width, height, canvas, nData, index ) => {
     s = "" + Math.round( 10 * Data.getDomain( nData, index )[ 1 ]) / 10;
     g.fillText( s, x + width - 3 - g.measureText( s ).width, y + 12 );
 };
-```
 
-```js
 // Plot.
 const Plot = new Object();
-```
 
-```js
 /**
  * Padding, in pixels.
  *
  * @constant {number}
  */
 Plot.padding = 10;
-```
 
-```js
 /**
  * Cached bitmap, or none iff undefined.
  *
  * @constant {ImageData|undefined}
  */
 Plot.imageData = undefined;
-```
 
-```js
 /**
  * Returns normalized rectangle.
  *
@@ -601,9 +538,7 @@ Plot.normalize = ( rect ) => {
     }
     return { x: nx, y: ny, width: nw, height: nh };
 }
-```
 
-```js
 /**
  * Returns whether point is within rectangle, within tolerance.
  *
@@ -622,9 +557,7 @@ Plot.isWithin = ( point, rect, tol ) => {
     return ( nRect.x <= point.x ) && ( point.x < nRect.x + nRect.width  ) &&
            ( nRect.y <= point.y ) && ( point.y < nRect.y + nRect.height );
 }
-```
 
-```js
 /**
  * Draws the plot.
  *
@@ -697,9 +630,7 @@ Plot.draw = ( x, y, width, height, i, j, scaled, canvas, opacity, selectedRows, 
     g.putImageData( myImageData, x, y, padding, padding, width - 2 * padding, height - 2 * padding );
     return deselectedImageData;
 };
-```
 
-```js
 /**
  * Selects rows within the brush and returns them.
  *
