@@ -669,8 +669,9 @@ Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
 ```
 
 ```js
+//
 // I set up a new Google Analytics property, 4E65ZQQL9N, but neither JS nor HTML work as is.
-// Require does not work locally. There is a d3.require package, but it's not recommended.
+// JS require does not work locally. There is a d3.require package, but it's not recommended.
 //
 // Google tag (gtag.js)
 // pageAnalytics = {
