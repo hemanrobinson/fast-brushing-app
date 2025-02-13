@@ -11,13 +11,17 @@
 		F86BECCE25B3217C0068BBF0 /* package-lock.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "package-lock.json"; sourceTree = "<group>"; };
 		F86BECCF25B3217D0068BBF0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F86BECD025B3217D0068BBF0 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
+		F8E6CF112D5E3059004FB1FF /* observablehq.config.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = observablehq.config.js; sourceTree = "<group>"; };
+		F8E6CF122D5E3210004FB1FF /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		F86BECC025B3208A0068BBF0 = {
 			isa = PBXGroup;
 			children = (
+				F8E6CF122D5E3210004FB1FF /* .gitignore */,
 				F86BECCF25B3217D0068BBF0 /* README.md */,
+				F8E6CF112D5E3059004FB1FF /* observablehq.config.js */,
 				F86BECCD25B3217C0068BBF0 /* package.json */,
 				F86BECCE25B3217C0068BBF0 /* package-lock.json */,
 				F86BECD025B3217D0068BBF0 /* src */,
