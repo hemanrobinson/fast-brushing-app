@@ -25,65 +25,6 @@ rect.selection {
 <p>
   Adjust the sliders to change the number of points and their transparency.
 </p>
-
-<h2>User Interface</h2>
-
-<p>
-  This design is based on the <a href="http://www.sci.utah.edu/~kpotter/Library/Papers/becker:1987:BS/index.html">scatter plot matrix</a> of <a href="https://www.researchgate.net/scientific-contributions/Richard-A-Becker-7076158">Richard Becker</a> and <a href="https://www.cerias.purdue.edu/site/people/faculty/view/709">William Cleveland</a> (Becker and Cleveland, 1987).
-</p>
-
-<figure>
-  <a href="https://www.datavis.ca/milestones/index.php?group=1975%2B&mid=ms259">
-    <img title="Dr. Richard Becker" alt="Dr. Richard Becker" src="${await FileAttachment("becker.png").url()}" style="border: 1px solid">
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://www.datavis.ca/milestones/index.php?group=1975%2B&mid=ms259">
-    <img title="Dr. William Cleveland" alt="Dr. William Cleveland" src="${await FileAttachment("cleveland.png").url()}" style="border: 1px solid">
-  </a>
-</figure>
-
-<p>
-  The goal of the scatter plot matrix is not to locate points, but to find patterns in the data.  Therefore, there are no axes, only data ranges.  This increases Tufte's "Data-Ink Ratio" (Tufte, 1983).
-</p>
-<p>
-  Colors emphasize the data. Black on white gives maximum emphasis.  The red selection color draws attention. The grid, being less important, is gray.
-</p>
-<p>
-  By the same logic, the brush could be gray. However, usability tests pointed out that the standard color for selection is blue (Ho, 2016).  Following standards eases the user's learning curve.
-</p>
-<p>
-  The edge of the brush has a distinct color, indicating a distinct function: dragging the edge resizes the brush, while dragging within the brush moves it.  These distinct functions are reinforced by distinct cursor shapes, but cursor shapes are subtle and only appear on hover. The distinct colors are always clearly visible.
-</p>
-<p>
-  <a href="https://github.com/d3/d3-brush">D3's brush</a> is <em>persistent</em> rather than <em>transient</em>.  A persistent brush reduces errors, by enabling the user to resize the brush (Tidwell, 2010).  A persistent brush also helps users share their explorations, through screen shots for example.
-</p>
-<p>
-  Transparency shows density, via <a href="https://en.wikipedia.org/wiki/Alpha_compositing">alpha blending</a>.  This gives scatter plots the expressive power of contour plots, while still displaying individual points (Wegman and Luo, 2002).
-</p>
-<p>
-  Shift, Control, and Command keys are standard modifiers to extend and reduce selections of individual objects (e.g. Apple, 2024). I have found no documented standards for their behavior during brushing. The behavior implemented here enables people to select irregular areas or disjoint clusters of points.
-</p>
-
-<h2>Implementation</h2>
-
-<p>
-  This project uses <a href="https://react.dev">React</a>, <a href="https://github.com/mui-org/material-ui">Material-UI</a>, and <a href="https://github.com/d3/d3">d3</a>, and reuses some code from the <a href="https://observablehq.com/collection/@d3/d3-brush">d3-brush collection</a>.
-</p>
-<p>
-  Optimization was a joint effort with <a href="https://observablehq.com/@fil">Fil</a>, whose suggestions made this code much faster. There are a number of smaller optimizations, but these had the greatest effect:
-</p>
-<ol>
-  <li>Drawing in a single CANVAS element is faster than drawing thousands of SVG elements.</li>
-  <li>Drawing each data point as a single pixel displays large data sets with minimal drawing code.</li>
-  <li>Caching pixel coordinates in integer Arrays eliminates scaling calculations during drawing and selection.</li>
-  <li>Caching deselected points in bitmaps reduces drawing to a fast <a href="https://en.wikipedia.org/wiki/Bit_blit">bit blit</a>, followed by drawing the selected points.</li>
-  <li><a href="https://levelup.gitconnected.com/debounce-in-javascript-improve-your-applications-performance-5b01855e086">Debouncing</a> the brushing interaction reduces drawing in large data sets.</li>
-</ol>
-<p>
-  Graph-specific optimizations are justified when brushing is frequent, as it is in scatter plot matrices.  Caching and debouncing can improve performance in any type of graph.
-</p>
-<p>
-  Performance varies on different devices. My iMac (2020, 3.6 GHz 10-Core Intel Core i9, 128 GB) can brush 1,000,000 points per plot. In a 4x4 matrix, that's twelve million points.  As our hardware improves, we'll see these numbers grow.
-</p>
 ```
 
 ```js
@@ -302,7 +243,7 @@ Data.getColumnNames = () => {
  * @return {number[]}  domain of specified column
  */
 Data.getDomain = ( nData, index ) => {
-  return [ d3.min( Data.getValues( nData ), d => d[ index ]), d3.max( Data.getValues( nData ), d => d[ index ])];
+    return [ d3.min( Data.getValues( nData ), d => d[ index ]), d3.max( Data.getValues( nData ), d => d[ index ])];
 };
 
 /**
@@ -665,6 +606,77 @@ Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
 };
 ```
 
+```html
+<h2>User Interface</h2>
+
+<p>
+  This design is based on the <a href="http://www.sci.utah.edu/~kpotter/Library/Papers/becker:1987:BS/index.html">scatter plot matrix</a> of <a href="https://www.researchgate.net/scientific-contributions/Richard-A-Becker-7076158">Richard Becker</a> and <a href="https://www.cerias.purdue.edu/site/people/faculty/view/709">William Cleveland</a> (Becker and Cleveland, 1987).
+</p>
+
+<figure>
+  <a href="https://www.datavis.ca/milestones/index.php?group=1975%2B&mid=ms259">
+    <img title="Dr. Richard Becker" alt="Dr. Richard Becker" src="${await FileAttachment("becker.png").url()}" style="border: 1px solid">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://www.datavis.ca/milestones/index.php?group=1975%2B&mid=ms259">
+    <img title="Dr. William Cleveland" alt="Dr. William Cleveland" src="${await FileAttachment("cleveland.png").url()}" style="border: 1px solid">
+  </a>
+</figure>
+
+<p>
+  The goal of the scatter plot matrix is not to locate points, but to find patterns in the data.  Therefore, there are no axes, only data ranges.  This increases Tufte's "Data-Ink Ratio" (Tufte, 1983).
+</p>
+<p>
+  Colors emphasize the data. Black on white gives maximum emphasis.  The red selection color draws attention. The grid, being less important, is gray.
+</p>
+<p>
+  By the same logic, the brush could be gray. However, usability tests pointed out that the standard color for selection is blue (Ho, 2016).  Following standards eases the user's learning curve.
+</p>
+<p>
+  The edge of the brush has a distinct color, indicating a distinct function: dragging the edge resizes the brush, while dragging within the brush moves it.  These distinct functions are reinforced by distinct cursor shapes, but cursor shapes are subtle and only appear on hover. The distinct colors are always clearly visible.
+</p>
+<p>
+  <a href="https://github.com/d3/d3-brush">D3's brush</a> is <em>persistent</em> rather than <em>transient</em>.  A persistent brush reduces errors, by enabling the user to resize the brush (Tidwell, 2010).  A persistent brush also helps users share their explorations, through screen shots for example.
+</p>
+<p>
+  Transparency shows density, via <a href="https://en.wikipedia.org/wiki/Alpha_compositing">alpha blending</a>.  This gives scatter plots the expressive power of contour plots, while still displaying individual points (Wegman and Luo, 2002).
+</p>
+<p>
+  Shift, Control, and Command keys are standard modifiers to extend and reduce selections of individual objects (e.g. Apple, 2024). I have found no documented standards for their behavior during brushing. The behavior implemented here enables people to select irregular areas or disjoint clusters of points.
+</p>
+
+<h2>Implementation</h2>
+
+<p>
+  This project uses <a href="https://react.dev">React</a>, <a href="https://github.com/mui-org/material-ui">Material-UI</a>, and <a href="https://github.com/d3/d3">d3</a>, and reuses some code from the <a href="https://observablehq.com/collection/@d3/d3-brush">d3-brush collection</a>.
+</p>
+<p>
+  Optimization was a joint effort with <a href="https://observablehq.com/@fil">Fil</a>, whose suggestions made this code much faster. There are a number of smaller optimizations, but these had the greatest effect:
+</p>
+<ol>
+  <li>Drawing in a single CANVAS element is faster than drawing thousands of SVG elements.</li>
+  <li>Drawing each data point as a single pixel displays large data sets with minimal drawing code.</li>
+  <li>Caching pixel coordinates in integer Arrays eliminates scaling calculations during drawing and selection.</li>
+  <li>Caching deselected points in bitmaps reduces drawing to a fast <a href="https://en.wikipedia.org/wiki/Bit_blit">bit blit</a>, followed by drawing the selected points.</li>
+  <li><a href="https://levelup.gitconnected.com/debounce-in-javascript-improve-your-applications-performance-5b01855e086">Debouncing</a> the brushing interaction reduces drawing in large data sets.</li>
+</ol>
+<p>
+  Graph-specific optimizations are justified when brushing is frequent, as it is in scatter plot matrices.  Caching and debouncing can improve performance in any type of graph.
+</p>
+<p>
+  Performance varies on different devices. My iMac (2020, 3.6 GHz 10-Core Intel Core i9, 128 GB) can brush 1,000,000 points per plot. In a 4x4 matrix, that's twelve million points.  As our hardware improves, we'll see these numbers grow.
+</p>
+
+<h2>Further Reading</h2>
+<ul>
+  <li>Apple (2024). MacOS User Guide. <a href="https://support.apple.com/en-ae/guide/mac-help/mchlp1378/mac">https://support.apple.com/en-ae/guide/mac-help/mchlp1378/mac</a>.</li><br/>
+  <li>Becker, R. and Cleveland, W. (1987). "Brushing Scatterplots". Technometrics. 29 (2): 127-142. <a href="https://doi.org/10.2307/1269768">https://doi.org/10.2307/1269768</a>.</li><br/>
+  <li>Ho, Y. (2016). Personal communication. <a href="https://www.linkedin.com/in/yang-ho-94b14860/">https://www.linkedin.com/in/yang-ho-94b14860/</a></li><br/>
+  <li>Tidwell, J. (2010). Designing Interfaces: Patterns for Effective Interaction Design, Second Edition, 312-314.  Sebastopol CA: O'Reilly Media. <a href="https://www.oreilly.com/library/view/designing-interfaces-3rd/9781492051954/">https://www.oreilly.com/library/view/designing-interfaces-3rd/9781492051954/</a>.</li><br/>
+  <li>Tufte, E. (1983). The Visual Display of Quantitative Information, First Edition, 91-105.  Cheshire CN: Graphics Press. <a href="https://www.edwardtufte.com/tufte/">https://www.edwardtufte.com/tufte/</a>.</li><br/>
+  <li>Wegman, E. and Luo, Q. (2002). "On Methods of Computer Graphics for Visualizing Densities". Journal of Computational and Graphical Statistics 11, (1), 137-162. <a href="https://doi.org/10.1198/106186002317375659">https://doi.org/10.1198/106186002317375659</a>.</li><br/>
+</ul>
+```
+
 ```js
 //
 // I set up a new Google Analytics property, 4E65ZQQL9N, but neither JS nor HTML work as is.
@@ -693,16 +705,4 @@ Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
   gtag('js', new Date());
   gtag('config', 'G-4E65ZQQL9N');
 </script -->
-```
-
-```html
-<h2>Further Reading</h2>
-<ul>
-  <li>Apple (2024). MacOS User Guide. <a href="https://support.apple.com/en-ae/guide/mac-help/mchlp1378/mac">https://support.apple.com/en-ae/guide/mac-help/mchlp1378/mac</a>.</li><br/>
-  <li>Becker, R. and Cleveland, W. (1987). "Brushing Scatterplots". Technometrics. 29 (2): 127-142. <a href="https://doi.org/10.2307/1269768">https://doi.org/10.2307/1269768</a>.</li><br/>
-  <li>Ho, Y. (2016). Personal communication. <a href="https://www.linkedin.com/in/yang-ho-94b14860/">https://www.linkedin.com/in/yang-ho-94b14860/</a></li><br/>
-  <li>Tidwell, J. (2010). Designing Interfaces: Patterns for Effective Interaction Design, Second Edition, 312-314.  Sebastopol CA: O'Reilly Media. <a href="https://www.oreilly.com/library/view/designing-interfaces-3rd/9781492051954/">https://www.oreilly.com/library/view/designing-interfaces-3rd/9781492051954/</a>.</li><br/>
-  <li>Tufte, E. (1983). The Visual Display of Quantitative Information, First Edition, 91-105.  Cheshire CN: Graphics Press. <a href="https://www.edwardtufte.com/tufte/">https://www.edwardtufte.com/tufte/</a>.</li><br/>
-  <li>Wegman, E. and Luo, Q. (2002). "On Methods of Computer Graphics for Visualizing Densities". Journal of Computational and Graphical Statistics 11, (1), 137-162. <a href="https://doi.org/10.1198/106186002317375659">https://doi.org/10.1198/106186002317375659</a>.</li><br/>
-</ul>
 ```
