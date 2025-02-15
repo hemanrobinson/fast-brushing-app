@@ -205,7 +205,7 @@ const transparency = view( Inputs.range([0, 0.99], {value: 0.5, step: 0.01, labe
 ```
 
 ```js
-// Listening to the sliders should not be necessary, but apparently it is.
+// Listen to the sliders, to redraw on input. This was not needed in notebooks.
 const inputs = document.getElementsByTagName( "input" );
 for( let i = 0; ( i < inputs.length ); i++ ) {
   inputs[ i ].addEventListener( "input", ( event ) => { Matrix.clear(); debouncedDraw; });
@@ -683,39 +683,4 @@ Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
   };
   return selectedRows;
 };
-```
-
-```js
-//
-// I set up a new Google Analytics property, 4E65ZQQL9N, but neither JS nor HTML work as is.
-// JS require does not work locally. There is a d3.require package, but it's not recommended.
-//
-// Google tag (gtag.js)
-// pageAnalytics = {
-// await require(`https://www.googletagmanager.com/gtag/js?id=G-4E65ZQQL9N`).catch(() => {});
-
-import { resolveFrom, requireFrom } from 'd3-require';
-const myRequire = requireFrom( resolveFrom( `https://www.googletagmanager.com/gtag/js?id=G-4E65ZQQL9N/` ));
-myRequire( "data" ).then(
-   const dataLayer = window.dataLayer = window.dataLayer || [];
-   const location = html`<a href>`;
-   gtag('js', new Date());
-   gtag('config', 'G-4E65ZQQL9N', {
-     'page_path': location.pathname,
-     'page_location' : location.href
-   });
-   return md`<sup>[Google Analytics](https://beta.observablehq.com/@peter-hartmann/page-analytics)</sup>`;
-   function gtag() { dataLayer.push(arguments); }
-);
-// }
-```
-```html
-<!-- Google tag (gtag.js)>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4E65ZQQL9N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-4E65ZQQL9N');
-</script -->
 ```
