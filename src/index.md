@@ -1,6 +1,18 @@
 # Optimized Brushing
 
 ```html
+<style>
+h2 {
+  padding-top: 10px;
+}
+rect.selection {
+  fill: #bcd6fB;
+  stroke: #bcd6fB;
+  fill-opacity: 0.3;
+  stroke-opacity: 1;
+}
+</style>
+
 <p>
   Brushing is a powerful technique of interactive graphics, highlighting linked data in multiple views. When it was developed in the 1980s, brushing was limited to a few hundred points.  On modern hardware, we can brush many more.
 </p>
@@ -260,17 +272,15 @@ for( let i = 0; ( i < inputs.length ); i++ ) {
   Performance varies on different devices. My iMac (2020, 3.6 GHz 10-Core Intel Core i9, 128 GB) can brush 1,000,000 points per plot. In a 4x4 matrix, that's twelve million points.  As our hardware improves, we'll see these numbers grow.
 </p>
 
-<style>
-h2 {
-  padding-top: 10px;
-}
-rect.selection {
-  fill: #bcd6fB;
-  stroke: #bcd6fB;
-  fill-opacity: 0.3;
-  stroke-opacity: 1;
-}
-</style>
+<h2>Further Reading</h2>
+<ul>
+  <li>Apple (2024). MacOS User Guide. <a href="https://support.apple.com/en-ae/guide/mac-help/mchlp1378/mac">https://support.apple.com/en-ae/guide/mac-help/mchlp1378/mac</a>.</li><br/>
+  <li>Becker, R. and Cleveland, W. (1987). "Brushing Scatterplots". Technometrics. 29 (2): 127-142. <a href="https://doi.org/10.2307/1269768">https://doi.org/10.2307/1269768</a>.</li><br/>
+  <li>Ho, Y. (2016). Personal communication. <a href="https://www.linkedin.com/in/yang-ho-94b14860/">https://www.linkedin.com/in/yang-ho-94b14860/</a></li><br/>
+  <li>Tidwell, J. (2010). Designing Interfaces: Patterns for Effective Interaction Design, Second Edition, 312-314.  Sebastopol CA: O'Reilly Media. <a href="https://www.oreilly.com/library/view/designing-interfaces-3rd/9781492051954/">https://www.oreilly.com/library/view/designing-interfaces-3rd/9781492051954/</a>.</li><br/>
+  <li>Tufte, E. (1983). The Visual Display of Quantitative Information, First Edition, 91-105.  Cheshire CN: Graphics Press. <a href="https://www.edwardtufte.com/tufte/">https://www.edwardtufte.com/tufte/</a>.</li><br/>
+  <li>Wegman, E. and Luo, Q. (2002). "On Methods of Computer Graphics for Visualizing Densities". Journal of Computational and Graphical Statistics 11, (1), 137-162. <a href="https://doi.org/10.1198/106186002317375659">https://doi.org/10.1198/106186002317375659</a>.</li><br/>
+</ul>
 ```
 
 ```js
@@ -675,18 +685,6 @@ Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
 };
 ```
 
-```html
-<h2>Further Reading</h2>
-<ul>
-  <li>Apple (2024). MacOS User Guide. <a href="https://support.apple.com/en-ae/guide/mac-help/mchlp1378/mac">https://support.apple.com/en-ae/guide/mac-help/mchlp1378/mac</a>.</li><br/>
-  <li>Becker, R. and Cleveland, W. (1987). "Brushing Scatterplots". Technometrics. 29 (2): 127-142. <a href="https://doi.org/10.2307/1269768">https://doi.org/10.2307/1269768</a>.</li><br/>
-  <li>Ho, Y. (2016). Personal communication. <a href="https://www.linkedin.com/in/yang-ho-94b14860/">https://www.linkedin.com/in/yang-ho-94b14860/</a></li><br/>
-  <li>Tidwell, J. (2010). Designing Interfaces: Patterns for Effective Interaction Design, Second Edition, 312-314.  Sebastopol CA: O'Reilly Media. <a href="https://www.oreilly.com/library/view/designing-interfaces-3rd/9781492051954/">https://www.oreilly.com/library/view/designing-interfaces-3rd/9781492051954/</a>.</li><br/>
-  <li>Tufte, E. (1983). The Visual Display of Quantitative Information, First Edition, 91-105.  Cheshire CN: Graphics Press. <a href="https://www.edwardtufte.com/tufte/">https://www.edwardtufte.com/tufte/</a>.</li><br/>
-  <li>Wegman, E. and Luo, Q. (2002). "On Methods of Computer Graphics for Visualizing Densities". Journal of Computational and Graphical Statistics 11, (1), 137-162. <a href="https://doi.org/10.1198/106186002317375659">https://doi.org/10.1198/106186002317375659</a>.</li><br/>
-</ul>
-```
-
 ```js
 //
 // I set up a new Google Analytics property, 4E65ZQQL9N, but neither JS nor HTML work as is.
@@ -694,16 +692,21 @@ Plot.select = ( x, y, width, height, i, j, scaled, brush ) => {
 //
 // Google tag (gtag.js)
 // pageAnalytics = {
-//   await require(`https://www.googletagmanager.com/gtag/js?id=G-4E65ZQQL9N`).catch(() => {});
-//   const dataLayer = window.dataLayer = window.dataLayer || [];
-//   const location = html`<a href>`;
-//   gtag('js', new Date());
-//   gtag('config', 'G-4E65ZQQL9N', {
-//     'page_path': location.pathname,
-//     'page_location' : location.href
-//   });
-//   return md`<sup>[Google Analytics](https://beta.observablehq.com/@peter-hartmann/page-analytics)</sup>`;
-//   function gtag() { dataLayer.push(arguments); }
+// await require(`https://www.googletagmanager.com/gtag/js?id=G-4E65ZQQL9N`).catch(() => {});
+
+import { resolveFrom, requireFrom } from 'd3-require';
+const myRequire = requireFrom( resolveFrom( `https://www.googletagmanager.com/gtag/js?id=G-4E65ZQQL9N/` ));
+myRequire( "data" ).then(
+   const dataLayer = window.dataLayer = window.dataLayer || [];
+   const location = html`<a href>`;
+   gtag('js', new Date());
+   gtag('config', 'G-4E65ZQQL9N', {
+     'page_path': location.pathname,
+     'page_location' : location.href
+   });
+   return md`<sup>[Google Analytics](https://beta.observablehq.com/@peter-hartmann/page-analytics)</sup>`;
+   function gtag() { dataLayer.push(arguments); }
+);
 // }
 ```
 ```html
