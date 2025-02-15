@@ -14,7 +14,7 @@ rect.selection {
 </style>
 
 <p>
-  Brushing is a powerful technique of interactive graphics, highlighting linked data in multiple views. When it was developed in the 1980s, brushing was limited to a few hundred points.  On modern hardware, we can brush many more.
+  Brushing is a powerful technique of exploratory data analysis, highlighting linked data in multiple views. When it was developed in the 1980s, brushing was limited to a few hundred points.  On modern hardware, we can brush many more.
 </p>
 <p>
   Drag the brush to select the points. Drag the edges to resize the brush. Drag a rectangle in any plot to create a new brush.
@@ -238,16 +238,16 @@ for( let i = 0; ( i < inputs.length ); i++ ) {
   By the same logic, the brush could be gray. However, usability tests pointed out that the standard color for selection is blue (Ho, 2016).  Following standards eases the user's learning curve.
 </p>
 <p>
-  The edge of the brush has a distinct color, indicating a distinct function: dragging the edge resizes the brush, while dragging within the brush moves it.  These distinct functions are reinforced by distinct cursor shapes, but cursor shapes are subtle and only appear on hover. The distinct colors are always clearly visible.
+  The edge of the brush has a distinct color, indicating a distinct function: dragging the edge resizes the brush, while dragging within the brush moves it.  These functions are also indicated by distinct cursor shapes, when hovering; but the distinct colors are always clearly visible.
 </p>
 <p>
-  <a href="https://github.com/d3/d3-brush">D3's brush</a> is <em>persistent</em> rather than <em>transient</em>.  A persistent brush reduces errors, by enabling the user to resize the brush (Tidwell, 2010).  A persistent brush also helps users share their explorations, through screen shots for example.
+  <a href="https://github.com/d3/d3-brush">D3's brush</a> is <em>persistent</em> rather than <em>transient</em>.  A persistent brush enables the user to gain further insight by adjusting its size (Tidwell, 2010).  A persistent brush also helps users share their explorations, through screen shots for example.
 </p>
 <p>
-  Transparency shows density, via <a href="https://en.wikipedia.org/wiki/Alpha_compositing">alpha blending</a>.  This gives scatter plots the expressive power of contour plots, while still displaying individual points (Wegman and Luo, 2002).
+  Transparency shows density, via <a href="https://en.wikipedia.org/wiki/Alpha_compositing">alpha blending</a>.  This gives scatter plots the expressive power of contour plots while still displaying individual points (Wegman and Luo, 2002).
 </p>
 <p>
-  Shift, Control, and Command keys are standard modifiers to extend and reduce selections of individual objects (e.g. Apple, 2024). I have found no documented standards for their behavior during brushing. The behavior implemented here enables people to select irregular areas or disjoint clusters of points.
+  Shift, Control, and Command keys are standard modifiers to extend and reduce selections of individual objects (e.g. Apple, 2024). I have found no standard for their behavior during brushing. The behavior implemented here enables users to select irregular areas or disjoint clusters of points.
 </p>
 
 <h2>Implementation</h2>
@@ -266,7 +266,7 @@ for( let i = 0; ( i < inputs.length ); i++ ) {
   <li><a href="https://levelup.gitconnected.com/debounce-in-javascript-improve-your-applications-performance-5b01855e086">Debouncing</a> the brushing interaction reduces drawing in large data sets.</li>
 </ol>
 <p>
-  Graph-specific optimizations are justified when brushing is frequent, as it is in scatter plot matrices.  Caching and debouncing can improve performance in any type of graph.
+  Graph-specific optimizations are justified when brushing is a frequent operation, as it is in scatter plots.  Caching and debouncing can improve performance in any type of graph.
 </p>
 <p>
   Performance varies on different devices. My iMac (2020, 3.6 GHz 10-Core Intel Core i9, 128 GB) can brush 1,000,000 points per plot. In a 4x4 matrix, that's twelve million points.  As our hardware improves, we'll see these numbers grow.
